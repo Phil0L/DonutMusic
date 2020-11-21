@@ -1,4 +1,4 @@
-package com.pl.donut.music.voice.music;
+package com.pl.donut.music.voice.music.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;

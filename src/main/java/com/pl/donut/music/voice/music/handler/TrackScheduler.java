@@ -42,14 +42,6 @@ public class TrackScheduler extends AudioEventAdapter {
             lastPlayed = player.getPlayingTrack();
     }
 
-    public void queueFront(AudioTrack track) {
-        if (!player.startTrack(track, false)) {
-            queue.add(0, track);
-        }
-        if (player.getPlayingTrack() != null)
-            lastPlayed = player.getPlayingTrack();
-    }
-
     /**
      * Start the next track, stopping the current one if it is playing.
      */
@@ -74,11 +66,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public ArrayList<AudioTrack> getList() {
         return queue;
-    }
-
-
-    public void playNow(AudioTrack track) {
-        this.player.startTrack(track, false);
     }
 
     @Override

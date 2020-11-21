@@ -7,7 +7,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.pl.donut.music.listener.ReactionListener;
 import com.pl.donut.music.voice.Disconnect;
 import com.pl.donut.music.voice.JoinMe;
-import com.pl.donut.music.voice.music.*;
+import com.pl.donut.music.voice.music.commands.*;
 import com.pl.donut.music.voice.record.Clip;
 import com.pl.donut.music.voice.record.Record;
 import net.dv8tion.jda.api.JDA;

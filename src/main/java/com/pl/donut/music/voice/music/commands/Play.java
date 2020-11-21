@@ -1,10 +1,11 @@
-package com.pl.donut.music.voice.music;
+package com.pl.donut.music.voice.music.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.pl.donut.music.Main;
 import com.pl.donut.music.voice.Join;
 import com.pl.donut.music.voice.music.handler.PlayerManager;
+import com.pl.donut.music.voice.music.spotify.Spotify;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -46,35 +47,38 @@ public class Play extends Command {
       getPlayer(event, player -> {
         Main.info(event, "Player loaded: " + player.name(), Main.ANSI_GREEN);
         Play.player = player;
-        String input;
-        AudioManager audio = event.getGuild().getAudioManager();
-        if (!audio.isConnected())
-          new Join().connect(event);
-
-        if (!isUrl(event.getArgs().trim())) {
-          Main.info(event, "Searching for songs with " + event.getArgs(), Main.ANSI_BLUE);
-          if (Play.player == Player.YOUTUBE) {
-            input = "ytsearch: " + event.getArgs();
-            PlayerManager manager = PlayerManager.getInstance();
-            manager.loadAndPlayTrack(event.getTextChannel(), input);
-          } else if (Play.player == Player.SPOTIFY)
-            Spotify.searchSpotify(event, event.getArgs());
-
-        } else {
-          Main.info(event, "Loading song or playlist " + event.getArgs(), Main.ANSI_BLUE);
-          input = event.getArgs().strip();
-          PlayerManager manager = PlayerManager.getInstance();
-          manager.loadAndPlay(event.getTextChannel(), input);
-
-        }
+        handlePlayCommand(event, event.getArgs(), player);
       });
+    }
+  }
+
+  public void handlePlayCommand(CommandEvent event, String input, Player player) {
+    AudioManager audio = event.getGuild().getAudioManager();
+    if (!audio.isConnected())
+      new Join().connect(event);
+
+    if (!isUrl(event.getArgs().trim())) {
+      Main.info(event, "Searching for songs: '" + input + "' with: " + player.name(), Main.ANSI_BLUE);
+      if (player == Player.YOUTUBE) {
+        // YOUTUBE
+        input = "ytsearch: " + input;
+        PlayerManager manager = PlayerManager.getInstance();
+        manager.loadOneAndPlay(event.getTextChannel(), input);
+      } else if (player == Player.SPOTIFY)
+        //SPOTIFY
+        Spotify.searchSpotify(event, input);
+    } else {
+      // URL
+      Main.info(event, "Loading song or playlist " + input, Main.ANSI_BLUE);
+      input = input.strip();
+      PlayerManager manager = PlayerManager.getInstance();
+      manager.loadAndPlay(event.getTextChannel(), input);
     }
   }
 
   private boolean isUrl(String input) {
     try {
       new URL(input);
-
       return true;
     } catch (MalformedURLException ignored) {
       return false;
