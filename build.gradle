@@ -8,6 +8,10 @@ version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
     jcenter()
 }
 
@@ -15,7 +19,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile group: 'junit', name: 'junit', version: '4.12'
-    compile 'net.dv8tion:JDA:4.2.0_217'
+    implementation("net.dv8tion:JDA:4.3.0_346")
     compile 'com.jagrosh:jda-utilities:3.0.5'
     compile 'org.slf4j:slf4j-jdk14:1.7.25'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'

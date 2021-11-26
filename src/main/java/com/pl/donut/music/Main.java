@@ -4,12 +4,16 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.pl.donut.music.listener.ReactionListener;
-import com.pl.donut.music.voice.Disconnect;
-import com.pl.donut.music.voice.JoinMe;
-import com.pl.donut.music.voice.music.commands.*;
-import com.pl.donut.music.voice.record.Clip;
-import com.pl.donut.music.voice.record.Record;
+import com.pl.donut.music.core.Disconnect;
+import com.pl.donut.music.core.JoinMe;
+import com.pl.donut.music.core.music.commands.*;
+import com.pl.donut.music.core.music.slash.SlashCommandClient;
+import com.pl.donut.music.core.music.slash.SlashCommandClientBuilder;
+import com.pl.donut.music.core.record.Clip;
+import com.pl.donut.music.core.record.Record;
+import com.pl.donut.music.core.music.slash.SlashCommandHandler;
+import com.pl.donut.music.core.music.listener.MessageListener;
+import com.pl.donut.music.core.music.listener.ReactionListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -61,41 +65,43 @@ public class Main {
     System.out.println("[" + guild.getName() + "]: " + color + command + Main.ANSI_RESET);
   }
 
+
   private void setup() throws LoginException {
     JDABuilder builder = JDABuilder.createDefault(Token.BOT_TOKEN);
     builder.setActivity(Activity.of(Activity.ActivityType.DEFAULT, "reloading"));
-    //builder.setDisabledCacheFlags(CacheFlag.VOICE_STATE,);
     builder.setBulkDeleteSplittingEnabled(false);
     builder.setCompression(Compression.NONE);
-    CommandClientBuilder cmd = new CommandClientBuilder();
-    cmd.setPrefix("%");
-    cmd.setOwnerId("653675331328409618");
-    cmd.setHelpWord("generichelp");
-    cmd.setActivity(Activity.playing("in dev rn | %status"));
 
-//    dblapi = new DiscordBotListAPI.Builder()
-//        .token(Token.DBL_TOKEN)
-//        .botId("653675331328409618")
-//        .build();
+    CommandClientBuilder commandClientBuilder = new CommandClientBuilder();
+    commandClientBuilder.setPrefix("%");
+    commandClientBuilder.setOwnerId("653675331328409618");
+    commandClientBuilder.setHelpWord("generichelp");
+    commandClientBuilder.setActivity(Activity.listening("Donut ASMR"));
+    commandClientBuilder.addCommand(new Disconnect());
+    commandClientBuilder.addCommand(new Record());
+    commandClientBuilder.addCommand(new Clip());
+    commandClientBuilder.addCommand(new Play());
+    commandClientBuilder.addCommand(new Volume());
+    commandClientBuilder.addCommand(new Pause());
+    commandClientBuilder.addCommand(new Skip());
+    commandClientBuilder.addCommand(new Song());
+    commandClientBuilder.addCommand(new Shuffle());
+    commandClientBuilder.addCommand(new Queue());
+    commandClientBuilder.addCommand(new JoinMe());
+    CommandClient commandClient = commandClientBuilder.build();
+    builder.addEventListeners(new EventWaiter(), commandClient);
 
-    //cmd.addCommand(new Join());
-    cmd.addCommand(new Disconnect());
-    cmd.addCommand(new Record());
-    cmd.addCommand(new Clip());
-    cmd.addCommand(new Play());
-    cmd.addCommand(new Player());
-    cmd.addCommand(new Volume());
-    cmd.addCommand(new Pause());
-    cmd.addCommand(new Skip());
-    cmd.addCommand(new Song());
-    cmd.addCommand(new Shuffle());
-    cmd.addCommand(new Queue());
-    cmd.addCommand(new JoinMe());
+    SlashCommandClientBuilder slashCommandClientBuilder = new SlashCommandClientBuilder();
+    slashCommandClientBuilder.addCommand(new Controls());
+    SlashCommandClient slashCommandClient = slashCommandClientBuilder.build();
+    builder.addEventListeners(new SlashCommandHandler(), slashCommandClient);
 
-    CommandClient client = cmd.build();
-    builder.addEventListeners(new EventWaiter(), client);
+
     builder.addEventListeners(new ReactionListener());
+    builder.addEventListeners(new MessageListener());
     Main.manager = builder.build();
+    slashCommandClient.upsertCommands();
+
 
 
   }
