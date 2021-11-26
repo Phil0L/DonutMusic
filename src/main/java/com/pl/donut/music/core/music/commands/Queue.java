@@ -38,6 +38,7 @@ public class Queue extends Command {
                 String queue = getQueue(guildMusicManager);
                 event.reply(new EmbedBuilder()
                     .setTitle(guildMusicManager.scheduler.getQueue().size() + " Tracks queued:")
+                    .setImage("https://raw.githubusercontent.com/Phil0L/DonutMusic/master/imgs/Donut-Bot-Queue.png")
                     .setColor(Color.CYAN)
                     .setDescription(queue).build());
             } else {

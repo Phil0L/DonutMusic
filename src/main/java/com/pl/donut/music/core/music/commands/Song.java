@@ -41,6 +41,7 @@ public class Song extends Command {
         .setColor(Color.CYAN)
         .setTitle(trackInfo.title)
         .setAuthor(trackInfo.author)
+        .setImage("https://raw.githubusercontent.com/Phil0L/DonutMusic/master/imgs/Donut-Bot-Playing.png")
         .setDescription(
             new SimpleDateFormat("mm:ss").format(new Date(track.getPosition())) + " / " +
                 new SimpleDateFormat("mm:ss").format(new Date(trackInfo.length)) + "\n");
