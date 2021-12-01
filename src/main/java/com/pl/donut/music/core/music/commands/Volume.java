@@ -29,19 +29,19 @@ public class Volume extends Command {
             PlayerManager manager = PlayerManager.getInstance();
             if (i > 50){
                 if (event.getMember().getPermissions().contains(Permission.ADMINISTRATOR)) {
-                    manager.getGuildMusicManager(event.getGuild()).player.setVolume(i);
+                    manager.getGuildAudioManager(event.getGuild()).player.setVolume(i);
                     event.getMessage().addReaction(ReactionEmoji.CHECKMARK).queue();
                 }else {
                     event.reply("You have to be an Administrator to change the volume to " + i);
                 }
             }else{
-                manager.getGuildMusicManager(event.getGuild()).player.setVolume(i);
+                manager.getGuildAudioManager(event.getGuild()).player.setVolume(i);
                 event.getMessage().addReaction(ReactionEmoji.CHECKMARK).queue();
             }
         } catch (Exception e){
             // volume request
             PlayerManager manager = PlayerManager.getInstance();
-            int volume = manager.getGuildMusicManager(event.getGuild()).player.getVolume();
+            int volume = manager.getGuildAudioManager(event.getGuild()).player.getVolume();
             event.reply(new EmbedBuilder().setColor(Color.BLUE).setTitle("The current Volume is **" + volume + "**.").build());
         }
     }

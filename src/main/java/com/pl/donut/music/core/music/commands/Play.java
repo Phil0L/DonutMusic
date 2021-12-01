@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.pl.donut.music.Main;
 import com.pl.donut.music.core.Join;
+import com.pl.donut.music.core.music.handler.MusicLoader;
 import com.pl.donut.music.core.music.handler.PlayerManager;
 import com.pl.donut.music.core.music.spotify.Spotify;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -58,8 +59,9 @@ public class Play extends Command {
       // URL
       Main.info(event, "Loading song or playlist " + input, Main.ANSI_BLUE);
       input = input.strip();
-      PlayerManager manager = PlayerManager.getInstance();
-      manager.loadURL(event.getTextChannel(), input);
+//      PlayerManager manager = PlayerManager.getInstance();
+//      manager.loadURL(event.getTextChannel(), input);
+      new MusicLoader().loadURL(event.getTextChannel(), input);
     }
   }
 
@@ -72,8 +74,9 @@ public class Play extends Command {
 
     // YOUTUBE
     input = "ytsearch: " + input;
-    PlayerManager manager = PlayerManager.getInstance();
-    manager.loadOne(event.getChannel(), input);
+//    PlayerManager manager = PlayerManager.getInstance();
+//    manager.loadOne(event.getChannel(), input);
+    new MusicLoader().loadOne(event.getChannel(), input);
 
   }
 

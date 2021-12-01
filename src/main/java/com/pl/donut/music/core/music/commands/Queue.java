@@ -3,7 +3,7 @@ package com.pl.donut.music.core.music.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.pl.donut.music.Main;
-import com.pl.donut.music.core.music.handler.GuildMusicManager;
+import com.pl.donut.music.core.music.handler.GuildAudioManager;
 import com.pl.donut.music.core.music.handler.PlayerManager;
 import com.pl.donut.music.util.ReactionEmoji;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -33,28 +33,28 @@ public class Queue extends Command {
         PlayerManager manager = PlayerManager.getInstance();
         if (event.getArgs().isEmpty()) {
             Guild guild = event.getGuild();
-            GuildMusicManager guildMusicManager = manager.getGuildMusicManager(guild);
-            if (!manager.getGuildMusicManager(event.getGuild()).scheduler.getQueue().isEmpty()) {
-                String queue = getQueue(guildMusicManager);
+            GuildAudioManager guildAudioManager = manager.getGuildAudioManager(guild);
+            if (!manager.getGuildAudioManager(event.getGuild()).scheduler.getQueue().isEmpty()) {
+                String queue = getQueue(guildAudioManager);
                 event.reply(new EmbedBuilder()
-                    .setTitle(guildMusicManager.scheduler.getQueue().size() + " Tracks queued:")
-                    .setImage("https://raw.githubusercontent.com/Phil0L/DonutMusic/master/imgs/Donut-Bot-Queue.png")
+                    .setTitle(guildAudioManager.scheduler.getQueue().size() + " Tracks queued:")
+                    .setThumbnail("https://raw.githubusercontent.com/Phil0L/DonutMusic/master/imgs/Donut-Bot-Queue.png")
                     .setColor(Color.CYAN)
                     .setDescription(queue).build());
             } else {
                 event.reply("No queue");
             }
         }else if (event.getArgs().equals("delete")){
-            manager.getGuildMusicManager(event.getGuild()).scheduler.clearQueue();
+            manager.getGuildAudioManager(event.getGuild()).scheduler.clearQueue();
         }else if (event.getArgs().equals("shuffle")){
             new Shuffle().execute(event);
         }
     }
 
     @NotNull
-    private String getQueue(GuildMusicManager guildMusicManager) {
+    private String getQueue(GuildAudioManager guildAudioManager) {
         StringBuilder desc = new StringBuilder();
-        AudioTrack[] tracks = guildMusicManager.scheduler.getQueue().toArray(AudioTrack[]::new);
+        AudioTrack[] tracks = guildAudioManager.scheduler.getQueue().toArray(AudioTrack[]::new);
         for (int i = 0; i < 9; i++) {
             if (i >= tracks.length) break;
             AudioTrack track = tracks[i];

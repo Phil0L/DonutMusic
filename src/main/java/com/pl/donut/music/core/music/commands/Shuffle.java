@@ -22,7 +22,7 @@ public class Shuffle extends Command {
         Main.log(event, "Shuffle");
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.getGuildMusicManager(event.getGuild()).scheduler.shuffle();
+        manager.getGuildAudioManager(event.getGuild()).scheduler.shuffle();
 
         event.getMessage().addReaction(ReactionEmoji.CHECKMARK).queue();
     }

@@ -4,7 +4,6 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.pl.donut.music.Main;
 import com.pl.donut.music.core.record.listener.AudioReceiveListener;
-import com.pl.donut.music.core.record.listener.AudioSendListener;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -73,7 +72,7 @@ public class Clip extends Command {
 
     }
 
-    public static void writeToFile(Guild guild, int time, TextChannel tc) {
+    public static void writeToFile(Guild guild, int duration, TextChannel tc) {
 
         AudioReceiveListener ah = (AudioReceiveListener) guild.getAudioManager().getReceivingHandler();
         EmbedBuilder eb = new EmbedBuilder();
@@ -93,8 +92,8 @@ public class Clip extends Command {
                 folder.mkdir();
             byte[] voiceData;
 
-            if (time > 0 && time <= AudioReceiveListener.PCM_MINS * 60 * 2) {
-                voiceData = ah.getUncompVoice(time);
+            if (duration > 0 && duration <= AudioReceiveListener.PCM_MINS * 60 * 2) {
+                voiceData = ah.getUncompVoice(duration);
                 voiceData = encodePcmToMp3(voiceData);
 
             } else {
@@ -125,7 +124,7 @@ public class Clip extends Command {
         } catch (Exception ex) {
             ex.printStackTrace();
             eb.setTitle("Unknown error sending file");
-            tc.sendMessage(eb.build()).queue();
+            tc.sendMessageEmbeds(eb.build()).queue();
         }
     }
 
@@ -145,7 +144,7 @@ public class Clip extends Command {
         }
         String saltStr = salt.toString();
 
-        //check for a collision on the 1/2e23 chance that it matches another salt string (lulW)
+        //check for a collision on the 1/2e62 chance that it matches another salt string (lulW)
         File dir = new File("/var/www/html/");
         if (!dir.exists())
             dir = new File("recordings/");
@@ -160,6 +159,7 @@ public class Clip extends Command {
         return saltStr;
     }
 
+    //TODO: move
     public static byte[] encodePcmToMp3(byte[] pcm) {
         LameEncoder encoder = new LameEncoder(new AudioFormat(48000.0f, 16, 2, true, true), 128, MPEGMode.STEREO, Lame.QUALITY_HIGHEST, false);
         ByteArrayOutputStream mp3 = new ByteArrayOutputStream();
@@ -180,6 +180,7 @@ public class Clip extends Command {
         return mp3.toByteArray();
     }
 
+    //TODO: implement somewhere else and better
     public static void killAudioHandlers(Guild g) {
         AudioReceiveListener ah = (AudioReceiveListener) g.getAudioManager().getReceivingHandler();
         if (ah != null) {
@@ -188,12 +189,14 @@ public class Clip extends Command {
             g.getAudioManager().setReceivingHandler(null);
         }
 
-        AudioSendListener sh = (AudioSendListener) g.getAudioManager().getSendingHandler();
-        if (sh != null) {
-            sh.canProvide = false;
-            sh.voiceData = null;
-            g.getAudioManager().setSendingHandler(null);
-        }
+//        if (g.getAudioManager().getSendingHandler() instanceof AudioSendListener) {
+//            AudioSendListener sh = (AudioSendListener) g.getAudioManager().getSendingHandler();
+//            if (sh != null) {
+//                sh.canProvide = false;
+//                sh.voiceData = null;
+//                g.getAudioManager().setSendingHandler(null);
+//            }
+//        }
 
         System.out.println("Destroyed audio handlers for " + g.getName());
         System.gc();

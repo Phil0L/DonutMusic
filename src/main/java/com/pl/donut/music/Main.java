@@ -7,19 +7,19 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.pl.donut.music.core.Disconnect;
 import com.pl.donut.music.core.JoinMe;
 import com.pl.donut.music.core.music.commands.*;
-import com.pl.donut.music.core.music.slash.SlashCommandClient;
-import com.pl.donut.music.core.music.slash.SlashCommandClientBuilder;
-import com.pl.donut.music.core.record.Clip;
-import com.pl.donut.music.core.record.Record;
-import com.pl.donut.music.core.music.slash.SlashCommandHandler;
 import com.pl.donut.music.core.music.listener.MessageListener;
 import com.pl.donut.music.core.music.listener.ReactionListener;
+import com.pl.donut.music.core.music.slash.SlashCommandClient;
+import com.pl.donut.music.core.music.slash.SlashCommandClientBuilder;
+import com.pl.donut.music.core.music.slash.SlashCommandHandler;
+import com.pl.donut.music.core.record.Clip;
+import com.pl.donut.music.core.record.Record;
+import com.pl.donut.music.core.voice.commands.SpeechControl;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.utils.Compression;
-import org.discordbots.api.client.DiscordBotListAPI;
 
 import javax.security.auth.login.LoginException;
 
@@ -34,8 +34,6 @@ public class Main {
   public static final String ANSI_CYAN = "\u001B[36m";
   public static final String ANSI_WHITE = "\u001B[37m";
   public static JDA manager;
-  public static DiscordBotListAPI dblapi;
-
 
   private Main() throws LoginException {
     setup();
@@ -65,7 +63,6 @@ public class Main {
     System.out.println("[" + guild.getName() + "]: " + color + command + Main.ANSI_RESET);
   }
 
-
   private void setup() throws LoginException {
     JDABuilder builder = JDABuilder.createDefault(Token.BOT_TOKEN);
     builder.setActivity(Activity.of(Activity.ActivityType.DEFAULT, "reloading"));
@@ -83,11 +80,13 @@ public class Main {
     commandClientBuilder.addCommand(new Play());
     commandClientBuilder.addCommand(new Volume());
     commandClientBuilder.addCommand(new Pause());
+    commandClientBuilder.addCommand(new Stop());
     commandClientBuilder.addCommand(new Skip());
     commandClientBuilder.addCommand(new Song());
     commandClientBuilder.addCommand(new Shuffle());
     commandClientBuilder.addCommand(new Queue());
     commandClientBuilder.addCommand(new JoinMe());
+    commandClientBuilder.addCommand(new SpeechControl());
     CommandClient commandClient = commandClientBuilder.build();
     builder.addEventListeners(new EventWaiter(), commandClient);
 
@@ -100,11 +99,5 @@ public class Main {
     builder.addEventListeners(new ReactionListener());
     builder.addEventListeners(new MessageListener());
     Main.manager = builder.build();
-    slashCommandClient.upsertCommands();
-
-
-
   }
-
-
 }

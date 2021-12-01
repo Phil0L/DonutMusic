@@ -33,9 +33,13 @@ public class SlashCommandClient extends ListenerAdapter {
     return buttonManager.request(button);
   }
 
-  public void upsertCommands(){
+  public static void main(String[] args) {
+    upsertCommands();
+  }
+
+  public static void upsertCommands(){
     Main.manager.updateCommands().queue();
-    for (SlashCommand slashCommand : slashCommands){
+    for (SlashCommand slashCommand : getInstance().slashCommands){
       Main.manager.upsertCommand(slashCommand.name, slashCommand.description).queue();
     }
   }

@@ -3,7 +3,7 @@ package com.pl.donut.music.core.music.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.pl.donut.music.Main;
-import com.pl.donut.music.core.music.handler.GuildMusicManager;
+import com.pl.donut.music.core.music.handler.GuildAudioManager;
 import com.pl.donut.music.core.music.handler.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -29,8 +29,8 @@ public class Song extends Command {
     Main.log(event, "Song");
 
     PlayerManager manager = PlayerManager.getInstance();
-    GuildMusicManager guildMusicManager = manager.getGuildMusicManager(event.getGuild());
-    AudioPlayer audioPlayer = guildMusicManager.player;
+    GuildAudioManager guildAudioManager = manager.getGuildAudioManager(event.getGuild());
+    AudioPlayer audioPlayer = guildAudioManager.player;
     AudioTrack track = audioPlayer.getPlayingTrack();
     if (track == null) {
       event.reply("There is no current song playing");
@@ -41,7 +41,7 @@ public class Song extends Command {
         .setColor(Color.CYAN)
         .setTitle(trackInfo.title)
         .setAuthor(trackInfo.author)
-        .setImage("https://raw.githubusercontent.com/Phil0L/DonutMusic/master/imgs/Donut-Bot-Playing.png")
+        .setThumbnail("https://raw.githubusercontent.com/Phil0L/DonutMusic/master/imgs/Donut-Bot-Playing.png")
         .setDescription(
             new SimpleDateFormat("mm:ss").format(new Date(track.getPosition())) + " / " +
                 new SimpleDateFormat("mm:ss").format(new Date(trackInfo.length)) + "\n");

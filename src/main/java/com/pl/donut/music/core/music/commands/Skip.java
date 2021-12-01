@@ -26,7 +26,7 @@ public class Skip extends Command {
     PlayerManager manager = PlayerManager.getInstance();
     if (event.getArgs().isEmpty()) {
       // skip 1
-      boolean skipable = manager.getGuildMusicManager(event.getGuild()).scheduler.nextTrack();
+      boolean skipable = manager.getGuildAudioManager(event.getGuild()).scheduler.nextTrack();
       if (skipable)
         event.getMessage().addReaction(ReactionEmoji.CHECKMARK).queue();
       else
@@ -35,13 +35,12 @@ public class Skip extends Command {
       try {
         if (event.getArgs().equals("all")) {
           // skip all
-          //TODO: stop command
-          manager.getGuildMusicManager(event.getGuild()).player.destroy();
+          new Stop().execute(event);
         } else {
           // skip with count
           int i = Integer.parseInt(event.getArgs().strip());
           while (i > 0) {
-            boolean skipable = manager.getGuildMusicManager(event.getGuild()).scheduler.nextTrack();
+            boolean skipable = manager.getGuildAudioManager(event.getGuild()).scheduler.nextTrack();
             if (!skipable) {
               event.reply("There is nothing left to play. How about some songs about donuts?");
               return;
@@ -52,7 +51,7 @@ public class Skip extends Command {
         event.getMessage().addReaction(ReactionEmoji.CHECKMARK).queue();
       } catch (Exception e) {
         // skip 1
-        boolean skipable = manager.getGuildMusicManager(event.getGuild()).scheduler.nextTrack();
+        boolean skipable = manager.getGuildAudioManager(event.getGuild()).scheduler.nextTrack();
         if (skipable)
           event.getMessage().addReaction(ReactionEmoji.CHECKMARK).queue();
         else

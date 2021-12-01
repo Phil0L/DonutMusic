@@ -3,6 +3,7 @@ package com.pl.donut.music.util;
 public class ReactionEmoji {
   public static final String PREVIOUS = "U+2B05";
   public static final String PLAY = "U+1F3B5";
+  public static final String PAUSE = "U+23F8";
   public static final String NEXT = "U+27A1";
   public static final String QUEUE = "U+2795";
   public static final String CHECKMARK = "U+2705";

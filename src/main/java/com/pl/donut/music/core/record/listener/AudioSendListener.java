@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.audio.AudioSendHandler;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-
+@Deprecated
 public class AudioSendListener implements AudioSendHandler {
     public byte[][] voiceData;
     public boolean canProvide;

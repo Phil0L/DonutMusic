@@ -1,6 +1,7 @@
 package com.pl.donut.music.core.music.listener;
 
 import com.pl.donut.music.core.Join;
+import com.pl.donut.music.core.music.handler.MusicLoader;
 import com.pl.donut.music.core.music.handler.PlayerManager;
 import com.pl.donut.music.core.music.spotify.Spotify;
 import com.pl.donut.music.core.music.spotify.SpotifyMessage;
@@ -55,18 +56,20 @@ public class ReactionListener extends ListenerAdapter {
       //PLAYLIST
       List<String> queries = new ArrayList<>();
       PlaylistTrack[] tracks = Spotify.getPlaylistsTracks(spotifyMessage.getCurrentPlaylist().getId());
-      int maxLoadCount = 25;
+      int maxLoadCount = 100;
       for (int i = 0; i < tracks.length && i < maxLoadCount; i++) {
         String artist = tracks[i].getTrack().getArtists()[0].getName();
         String title = tracks[i].getTrack().getName();
         String search = "ytsearch:" + artist + "-" + title;
         queries.add(search);
       }
-      manager.loadMultiple(event.getChannel(), spotifyMessage.getCurrentPlaylist(), queries.toArray(String[]::new));
+//      manager.loadMultiple(event.getChannel(), spotifyMessage.getCurrentPlaylist(), queries.toArray(String[]::new));
+      new MusicLoader().loadMultiple(event.getChannel(), spotifyMessage.getCurrentPlaylist(), queries.toArray(String[]::new));
     } else {
       //SINGLE
       Track track = spotifyMessage.getCurrentTrack();
-      manager.loadOne(event.getChannel(), "ytsearch:" + track.getArtists()[0].getName() + "-" + track.getName());
+//      manager.loadOne(event.getChannel(), "ytsearch:" + track.getArtists()[0].getName() + "-" + track.getName());
+      new MusicLoader().loadOne(event.getChannel(), "ytsearch:" + track.getArtists()[0].getName() + "-" + track.getName());
     }
   }
 
